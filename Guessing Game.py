@@ -1,60 +1,78 @@
-import os
+import numpy.random.common
+import numpy.random.bounded_integers
+import numpy.random.entropy
 import matplotlib.pyplot as plt
-lst = []
-lsth = []
-n = 100
-a = int(input("What is the secret number between 1 - 100: "))
-os.system('cls')
+from random import *
 
-for i in range(0, n):
-    b = int(input("what is the number between 1 and 100: "))
 
-    lst.append(b)
-    lsth.append("#" * b)
-    break
+def add_hashes_to_list():
+    print("#" * b)
 
-print("#" * b)
+
+def add_guess_to_list():
+    guess_list.append(b)
+    hash_list.append("#" * b)
+
+
+guess_list = []
+hash_list = []
+
+random_number = (randint(1, 100))
+guess_list.append(random_number)
 
 while True:
-    if b > a:
-        print("lower")
-        for i in range(0, n):
-            b = int(input(""))
-            lst.append(b)
-            lsth.append("#" * b)
-            print("#" * b)
+    try:
+        b = int(input("what is the number between 1 and 100: "))
+        add_guess_to_list()
+        add_hashes_to_list()
+    except ValueError:
+        print("Unknown number, please try again")
+        pass
+    else:
+        break
 
-            break
 
-    elif a == b:
+while True:
+    if b > random_number:
+        print("The number is lower")
+        try:
+            b = int(input("Guess again: "))
+            add_guess_to_list()
+            add_hashes_to_list()
+        except ValueError:
+            print("Unknown number, please try again")
+            pass
 
-        print("YOU GOT IT    " * 3)
+    elif random_number == b:
+        print("YOU GOT IT!!!    " * 3)
         print("Your guesses:")
-        print(lst)
-        p = len(lst)
+        print(guess_list[1:])
+        p = len(guess_list)
         print("How many times u guessed:")
-        print(p)
+        print(p - 1)
 
         with open('output.txt', 'w') as file:
-            for output in lst:
+            for output in guess_list[1:]:
                 file.write("%i\n" % output)
-        with open('outputhash.txt', 'w') as filehandle:
-            for listitem in lsth:
-                filehandle.write('%s\n' % listitem)
-        tg = [x for x in range(len(lst))]
-        plt.scatter(tg,lst, label='scatter plot', color='b', s=50)
+        with open('output_hash.txt', 'w') as file:
+            for output in hash_list:
+                file.write('%s\n' % output)
 
-        plt.xlabel('Guesses')
-        plt.ylabel('number guessed')
+        tg = [x for x in range(len(guess_list))]
 
-        plt.title('Scatter plot chart\nof your choices')
+        plt.scatter(tg, guess_list, label='Scatter Plot', color='b', s=50)
+        plt.xlabel('Guesses\n0 = Number trying to guess')
+        plt.ylabel('Number guessed')
+        plt.title('Scatter Plot Chart\nof your choices')
         plt.show()
         break
+
     else:
-        print("higher")
-        for i in range(0, n):
-            b = int(input(""))
-            lst.append(b)
-            lsth.append("#" * b)
-            print("#" * b)
-            break
+        print("The number is higher")
+        try:
+            b = int(input("Guess again:"))
+            add_guess_to_list()
+            add_hashes_to_list()
+        except ValueError:
+            print("Unknown number, please try again")
+            pass
